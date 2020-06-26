@@ -10,7 +10,7 @@ public class Carro {
 
     private final Cor cor;
 
-    private Carro(Motorista motorista, String placa, Cor cor) {
+    private Carro(final Motorista motorista, final String placa, final Cor cor) {
         this.motorista = motorista;
         this.placa = placa;
         this.cor = cor;
@@ -29,14 +29,14 @@ public class Carro {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Carro carro = (Carro) o;
+        final Carro carro = (Carro) o;
         return Objects.equals(motorista, carro.motorista) && Objects.equals(placa, carro.placa) && cor == carro.cor;
     }
 
@@ -65,22 +65,34 @@ public class Carro {
         private CarroBuilder() {
         }
 
-        public CarroBuilder withMotorista(Motorista motorista) {
+        public CarroBuilder withMotorista(final Motorista motorista) {
             this.motorista = motorista;
             return this;
         }
 
-        public CarroBuilder withPlaca(String placa) {
+        public CarroBuilder withPlaca(final String placa) {
+            if (placa.isEmpty()) {
+                throw new IllegalArgumentException("O carro deve possuir uma placa");
+            }
             this.placa = placa;
             return this;
         }
 
-        public CarroBuilder withCor(Cor cor) {
+        public CarroBuilder withCor(final Cor cor) {
             this.cor = cor;
             return this;
         }
 
         public Carro build() {
+            if (this.placa == null) {
+                throw new NullPointerException("O carro deve ter uma placa!");
+            }
+            if (this.cor == null) {
+                throw new NullPointerException("O carro deve ter uma cor!");
+            }
+            if (this.motorista == null) {
+                throw new EstacionamentoException("O carro deve ter um motorista!");
+            }
             return new Carro(motorista, placa, cor);
         }
     }
